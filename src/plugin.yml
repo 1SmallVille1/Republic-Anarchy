@@ -1,0 +1,8 @@
+name: RepublicAnarchy
+version: 0.0000000001
+author: 1SmallVille1
+main: com.RepublicAnarchy.Setup.Main
+depend: [RemoteEntities]
+commands:
+    s:
+    logout:
