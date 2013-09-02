@@ -7,8 +7,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.RepublicAnarchy.Commands.LogoutCommand;
+import com.RepublicAnarchy.Listeners.ChatListener;
 import com.RepublicAnarchy.Listeners.JoinListener;
-import com.RepublicAnarchy.Listeners.LogListener;
+import com.RepublicAnarchy.Listeners.LoginListener;
 import com.RepublicAnarchy.Listeners.QuitListener;
 import com.RepublicAnarchy.Utils.BalanceManager;
 import com.RepublicAnarchy.Utils.BountyManager;
@@ -27,7 +28,8 @@ public class Main extends JavaPlugin {
 
 	JoinListener jl = new JoinListener(this);
 	QuitListener ql = new QuitListener(this);
-	LogListener ll = new LogListener();
+	LoginListener ll = new LoginListener();
+	ChatListener cl = new ChatListener();
 	
 	public void onEnable() {
 
@@ -39,6 +41,7 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(jl, this);
 		pm.registerEvents(ql, this);
 		pm.registerEvents(ll, this);
+		pm.registerEvents(cl, this);
 
 		LogoutCommand lc = new LogoutCommand(this);
 		

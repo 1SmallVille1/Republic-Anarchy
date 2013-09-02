@@ -1,5 +1,7 @@
 package com.RepublicAnarchy.Listeners;
 
+import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -71,6 +73,8 @@ public class QuitListener implements Listener, Runnable {
 			human.copyInventory(player);
 
 			human.spawn(loc);
+			
+			log = false;
 
 			y = plugin.getConfig().getInt("NPCTimer");
 
@@ -78,7 +82,7 @@ public class QuitListener implements Listener, Runnable {
 
 			t = Bukkit.getServer().getScheduler()
 					.scheduleSyncRepeatingTask(plugin, this, 0L, 20L);
-
+			
 		}
 
 	}
@@ -106,8 +110,12 @@ public class QuitListener implements Listener, Runnable {
 
 			settings.getPInfo().set(name + ".tempBan", x + y);
 			settings.savePInfo();
+			
+			Bukkit.getLogger().log(Level.INFO, "NPC");
 
 			if (y == 0) {
+				
+				Bukkit.getLogger().log(Level.INFO, "NPC = DEAD");
 
 				human.despawn(DespawnReason.CUSTOM);
 

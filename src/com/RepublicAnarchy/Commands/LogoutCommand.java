@@ -2,6 +2,7 @@ package com.RepublicAnarchy.Commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,6 +26,8 @@ public class LogoutCommand implements CommandExecutor, Runnable {
 	public int t = 0, y = 0;
 
 	public Player p;
+
+	Location loc = null;
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
@@ -55,10 +58,13 @@ public class LogoutCommand implements CommandExecutor, Runnable {
 
 			}
 
+			loc = null;
+
 			t = Bukkit.getServer().getScheduler()
 					.scheduleSyncRepeatingTask(plugin, this, 0L, 20L);
 
 			settings.getPInfo().set(p.getName() + ".loggingout", true);
+			settings.getPInfo().set(p.getName() + ".logoutTask", t);
 			settings.savePInfo();
 
 			y = plugin.getConfig().getInt("logoutTimer");
@@ -69,6 +75,36 @@ public class LogoutCommand implements CommandExecutor, Runnable {
 	}
 
 	public void run() {
+
+		Location l = new Location(p.getLocation().getWorld(), p.getLocation()
+				.getBlockX(), p.getLocation().getBlockY(), p.getLocation()
+				.getBlockZ());
+
+		if (loc == null) {
+
+			loc = l;
+
+		} else {
+
+			if (loc.getBlockX() != l.getBlockX()
+					|| loc.getBlockY() != l.getBlockY()
+					|| loc.getBlockZ() != l.getBlockZ()) {
+
+				Bukkit.getServer().getScheduler().cancelTask(t);
+
+				p.sendMessage(ChatColor.RED
+						+ "Cancelled logout due to movement");
+
+				settings.getPInfo().set(p.getName() + ".loggingout", false);
+				settings.savePInfo();
+
+				loc = null;
+
+				return;
+
+			}
+
+		}
 
 		p.sendMessage(ChatColor.DARK_GREEN + "You have " + y
 				+ "s until you safely log out");
